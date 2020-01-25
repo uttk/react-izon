@@ -3,22 +3,18 @@ const path = require('path')
 module.exports = {
   entry: path.resolve('src/index.tsx'),
 
+  mode: "production",
+
   output: {
-    path: path.resolve(__dirname, '/dist'),
-    publicPath: '/',
+    path: path.resolve(__dirname, './public'),
+    publicPath: "/",
     filename: 'bundle.js',
   },
 
   module: {
     rules: [{
       test: /\.(ts|tsx)$/,
-      use: 'awesome-typescript-loader',
+      use: 'ts-loader',
     }],
-  },
-
-  devServer: {
-    host: 'localhost',
-    port: 9000,
-    contentBase: path.resolve("public"),
-  },
+  }
 }
