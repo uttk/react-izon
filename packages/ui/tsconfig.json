@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "target": "es5",
+    "module": "es2015",
+    "jsx": "react",
+    "moduleResolution": "node",
+    "lib": ["es2019", "dom"],
+    "typeRoots": ["src", "lib"]
+  },
+  "include": ["src"]
+}
