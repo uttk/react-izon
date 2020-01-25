@@ -2,11 +2,11 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "target": "es5",
-    "module": "es2015",
+    "module": "ESNext",
     "jsx": "react",
+    "noImplicitAny": false,
     "moduleResolution": "node",
-    "lib": ["es2019", "dom"],
-    "typeRoots": ["src", "lib"]
+    "lib": ["es2019", "dom"]
   },
-  "include": ["src"]
+  "include": ["src",]
 }

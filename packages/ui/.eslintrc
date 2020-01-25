@@ -1,7 +1,0 @@
-{
-  "extends": ["airbnb"],
-  "plugins": ["react"],
-  "rules": {
-    "@typescript-eslint/no-use-before-define": "none"
-  }
-}
