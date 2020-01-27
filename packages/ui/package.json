@@ -1,5 +1,6 @@
 {
   "name": "@react-izon/ui",
+  "private": true,
   "version": "0.0.0",
   "description": "> TODO: description",
   "author": "uttk <uttk8128@gmail.com>",
@@ -19,6 +20,7 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
+    "@react-izon/core": "^0.0.0",
     "express": "^4.17.1",
     "opn": "^6.0.0",
     "react": "^16.12.0",

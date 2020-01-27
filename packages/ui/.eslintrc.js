@@ -19,6 +19,8 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint"],
   rules: {
-    "react/jsx-filename-extension": ["off"]
+    "react/jsx-filename-extension": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error"
   }
 };

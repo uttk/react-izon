@@ -1,35 +1,39 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { Dependency } from '@react-izon/core';
 import styles from './index.scss';
 
-const JSONPreview = () => {
-  const [json, setJSON] = React.useState({});
-  const [error, setError] = React.useState('');
+
+const useComponentDependency = (componentName: string) => {
+  const [json, setJSON] = React.useState<Dependency | null>(null);
+  const [error, setError] = React.useState<string>('');
 
   React.useEffect(() => {
-    fetch('/dependencies').then((res) => {
-      res
-        .json()
-        .then(setJSON)
-        .catch(() => setError('情報の取得に失敗しました'));
-    });
+    const onError = () => setError('Can not found Component Dependency');
+
+    fetch(`json/${componentName}`)
+      .then((res) => res.json().then(setJSON).catch(onError))
+      .catch(onError);
   }, []);
 
-  return (
-    <div>
-      <h2>Json Preview</h2>
-      <code>{JSON.stringify(json)}</code>
-      <p style={{ color: 'red' }}>{error}</p>
-    </div>
-  );
+
+  return { result: json, error };
 };
 
-const App = () => (
-  <>
-    <h1 className={styles.title}>Hello World!</h1>
 
-    <JSONPreview />
-  </>
-);
+const App = () => {
+  const { error, result } = useComponentDependency('Hello');
+
+  return (
+    <>
+      <h1 className={styles.title}>Hello World!</h1>
+
+      <p style={{ color: 'red' }}>{error}</p>
+
+      <h2>JSON Preview</h2>
+      <code>{JSON.stringify(result)}</code>
+    </>
+  );
+};
 
 ReactDOM.render(<App />, document.getElementById('app'));
