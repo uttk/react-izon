@@ -8,5 +8,5 @@
     "moduleResolution": "node",
     "lib": ["es2019", "dom"]
   },
-  "include": ["src",]
+  "include": ["src"]
 }
