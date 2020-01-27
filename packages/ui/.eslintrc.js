@@ -1,5 +1,3 @@
-const path = require("path")
-
 module.exports = {
   env: {
     browser: true,
@@ -17,7 +15,7 @@ module.exports = {
     },
     ecmaVersion: 2018,
     sourceType: "module",
-    project: "./packages/ui/tsconfig.json"
+    project: "./tsconfig.json"
   },
   plugins: ["react", "@typescript-eslint"],
   rules: {
