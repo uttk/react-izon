@@ -1,37 +1,27 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Dependency } from '@react-izon/core';
+import { Dependencies } from '@react-izon/core';
+import { SideBar } from './SideBar';
 import styles from './index.scss';
 
 
-const useComponentDependency = (componentName: string) => {
-  const [json, setJSON] = React.useState<Dependency | null>(null);
+const App = () => {
+  const [json, setJSON] = React.useState<Dependencies | null>(null);
   const [error, setError] = React.useState<string>('');
 
   React.useEffect(() => {
     const onError = () => setError('Can not found Component Dependency');
 
-    fetch(`json/${componentName}`)
+    fetch('/json')
       .then((res) => res.json().then(setJSON).catch(onError))
       .catch(onError);
   }, []);
 
-
-  return { result: json, error };
-};
-
-
-const App = () => {
-  const { error, result } = useComponentDependency('Hello');
-
   return (
     <>
-      <h1 className={styles.title}>Hello World!</h1>
+      { error ? (<p className={styles.error_message}>{ error }</p>) : null}
 
-      <p style={{ color: 'red' }}>{error}</p>
-
-      <h2>JSON Preview</h2>
-      <code>{JSON.stringify(result)}</code>
+      <SideBar componentNames={Object.keys(json)} />
     </>
   );
 };
