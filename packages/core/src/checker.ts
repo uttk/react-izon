@@ -26,9 +26,14 @@ export class DependencyChecker {
   private replaceNameList: { [path: string]: string | undefined } = {};
 
   constructor(file: string, done: DoneCallback) {
-    this.rootDir = pathResolver.dirname(file);
+    const result = pathResolver.parse(file);
+    this.rootDir = result.dir;
     this.file = file;
     this.done = done;
+
+    if(!result.dir || !result.base){
+      throw new Error('Invalid file path : ' + file);
+    }
   }
 
   private isDone(): boolean {
