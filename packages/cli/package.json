@@ -1,19 +1,13 @@
 {
   "name": "react-izon",
-  "description": "Dependency analysis tool of React Component",
+  "description": "Dependency analysis tool of React Components",
   "version": "0.0.0",
-  "author": "uttk <uttk8128@gmail> (https://github.com/uttk)",
+  "author": "uttk @uttk",
   "bin": {
     "react-izon": "./bin/run"
   },
   "bugs": "https://github.com/uttk/react-izon/issues",
-  "directories": {
-    "lib": "lib",
-    "bin": "bin",
-    "test": "test"
-  },
   "dependencies": {
-    "@babel/parser": "^7.8.3",
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^2",
@@ -26,12 +20,12 @@
     "@types/mocha": "^5",
     "@types/node": "^10",
     "chai": "^4",
-    "eslint": "^6.8.0",
+    "eslint": "^5.13",
     "eslint-config-oclif": "^3.1",
     "eslint-config-oclif-typescript": "^0.1",
-    "globby": "^10",
     "mocha": "^5",
     "nyc": "^14",
+    "rimraf": "^3.0.1",
     "ts-node": "^8",
     "typescript": "^3.3"
   },
@@ -40,33 +34,21 @@
   },
   "files": [
     "/bin",
-    "/lib",
-    "/npm-shrinkwrap.json",
-    "/oclif.manifest.json"
+    "/lib"
   ],
   "homepage": "https://github.com/uttk/react-izon",
   "keywords": [
-    "cli",
-    "react",
-    "react-izon",
-    "dependency",
-    "component",
-    "tool"
+    "oclif"
   ],
   "license": "MIT",
   "main": "lib/index.js",
   "oclif": {
-    "commands": "./lib/commands",
-    "bin": "react-izon",
-    "plugins": [
-      "@oclif/plugin-help"
-    ]
+    "bin": "react-izon"
   },
   "repository": "uttk/react-izon",
   "scripts": {
-    "postpack": "rm -f oclif.manifest.json",
     "posttest": "eslint . --ext .ts --config .eslintrc",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "prepack": "rimraf lib && tsc -b && oclif-dev readme",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif-dev readme && git add README.md"
   },
