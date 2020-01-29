@@ -1,92 +1,226 @@
-// import * as fs from 'fs'
-// import * as path from 'path'
-// import * as babelParser from '@babel/parser'
-import { babelTypes } from './types'
-import { ComponentDependency } from './component-dependency'
-// import { getComponentName } from './util'
+import * as pathResolver from 'path';
+import * as babelTypes from '@babel/types';
+import { CheckStatus, DoneCallback } from './types';
+import {
+  asyncFunc,
+  getAST,
+  getComponentName,
+  getIdentiferName,
+  checkFilePath
+} from './util';
+import { ComponentDependencies } from './dependencies';
 
-export class DependenceChecker {
-  private readonly root_path: string = ''
-
-  private readonly try_exe = ['js', 'ts', 'jsx', 'tsx']
-
-  private component_dependency = new ComponentDependency();
-
-  // constructor(file_path: string) {
-  //   this.root_path = file_path
-  //   // this.root_path = file_path.split(/\//).slice(0,-1).filter(v => !/.+\.(ts|js)x?/.test(v)).join('/')
-  // }
-
-  private getAST(path: string): babelTypes.Statement[] {
-    if (/^[\w@]+/.test(path)) {
-      return []
-    }
-
-    // for (const exe of this.try_exe) {
-    //   let file_path = path
-
-    //   try {
-    //     if (!/\.(js|ts)x?$/.test(path)) file_path = `${path}.${exe}`
-
-    //     const code = fs.readFileSync(file_path, 'utf8')
-
-    //     return babelParser.parse(code, {
-    //       sourceType: 'module',
-    //       plugins: ['jsx', 'typescript'],
-    //     }).program.body
-    //   } catch  {
-    //   }
-    // }
-
-    throw new Error('can not read file')
-  }
-
-  // private update(jsx: babelTypes.JSXElement) {
-  //   const name = getComponentName(jsx)
-
-  //   // if (name) {
-  //   //   this.component_dependency.setDependency(name, jsx)
-  //   // }
-
-  //   this.visitor(jsx.children)
-  // }
-
-  // private visitor(ast: babelTypes.Node[]) {
-  //   ast.forEach(node => {
-  //     switch (node.type) {
-  //       case 'ImportDeclaration': {
-  //         const _path = path.resolve(this.root_path, node.source.value)
-  //         const statement = this.getAST(_path)
-
-  //         this.visitor(statement)
-  //         break
-  //       }
-
-  //       case 'ExportNamedDeclaration': {
-  //         this.visitor([node.declaration])
-  //         break
-  //       }
-
-  //       case 'VariableDeclaration': {
-  //         const init = node.declarations[0].init
-
-  //         if (init && init.type === 'ArrowFunctionExpression') {
-  //           this.visitor([init.body])
-  //         }
-  //         break
-  //       }
-
-  //       case 'JSXElement':
-  //         this.update(node)
-  //         break
-  //     }
-  //   })
-  // }
-
-  // public check() {
-  //   const ast = this.getAST(this.root_path)
-
-  //   this.visitor(ast)
-  // }
+interface VisitorElements {
+  path: string;
+  componentName?: string;
+  parentNode?: babelTypes.Node;
 }
 
+export class DependencyChecker {
+  private readonly file: string = '';
+  private readonly rootDir: string = '';
+
+  private dependencies = new ComponentDependencies();
+  private progress: { [path: string]: CheckStatus } = {};
+  private done: DoneCallback;
+  private replaceNameList: { [path: string]: string | undefined } = {};
+
+  constructor(file: string, done: DoneCallback) {
+    this.rootDir = pathResolver.dirname(file);
+    this.file = file;
+    this.done = done;
+  }
+
+  private isDone(): boolean {
+    for (const key in this.progress) {
+      if (this.progress[key] !== 'end') return false;
+    }
+
+    return true;
+  }
+
+  private setComponent(
+    name?: string,
+    path?: string,
+    node?: babelTypes.Node
+  ): void {
+    if (!name) return;
+
+    if (path) {
+      this.dependencies.setRootPath(name, path);
+    }
+
+    if (
+      babelTypes.isClassDeclaration(node) ||
+      babelTypes.isVariableDeclaration(node) ||
+      babelTypes.isFunctionDeclaration(node) ||
+      babelTypes.isExportNamedDeclaration(node) ||
+      babelTypes.isExportDefaultDeclaration(node)
+    ) {
+      this.dependencies.setDefined(name, node);
+    }
+  }
+
+  private visitor(
+    node: babelTypes.Node | null,
+    elements: VisitorElements
+  ): void {
+    const ele = { ...elements };
+
+    if (node === null) return;
+
+    switch (node.type) {
+      case 'ImportDeclaration': {
+        node.specifiers.forEach(spec => {
+          if (
+            spec.type === 'ImportDefaultSpecifier' &&
+            checkFilePath(node.source.value)
+          ) {
+            const path = pathResolver.resolve(this.rootDir, node.source.value);
+
+            if (!this.replaceNameList[path]) {
+              this.replaceNameList[path] = spec.local.name;
+            }
+          }
+        });
+
+        this.checkAST(node.source.value);
+        break;
+      }
+
+      case 'ExportDefaultDeclaration': {
+        const name = this.replaceNameList[ele.path];
+
+        if (name) {
+          ele.parentNode = node;
+          ele.componentName = name.charAt(0).toUpperCase() + name.slice(1);
+
+          this.visitor(node.declaration, ele);
+        }
+
+        break;
+      }
+
+      case 'ExportNamedDeclaration': {
+        ele.parentNode = node;
+        this.visitor(node.declaration, ele);
+        break;
+      }
+
+      case 'VariableDeclaration': {
+        const dec = node.declarations[0];
+
+        ele.parentNode = ele.parentNode || node;
+        ele.componentName = ele.componentName || getIdentiferName(dec.id);
+
+        this.visitor(dec.init, ele);
+
+        break;
+      }
+
+      case 'FunctionDeclaration': {
+        ele.parentNode = ele.parentNode || node;
+        ele.componentName = ele.componentName || getIdentiferName(node.id);
+
+        this.visitor(node.body, ele);
+
+        break;
+      }
+
+      case 'ArrowFunctionExpression': {
+        if (ele.componentName && ele.parentNode) {
+          this.visitor(node.body, ele);
+        }
+
+        break;
+      }
+
+      case 'ClassExpression': {
+        if (ele.componentName && ele.parentNode) {
+          node.body.body.forEach(n => this.visitor(n, ele));
+        }
+
+        break;
+      }
+
+      case 'ClassDeclaration': {
+        if (babelTypes.isClassBody(node.body)) {
+          ele.parentNode = ele.parentNode || node;
+          ele.componentName = ele.componentName || getIdentiferName(node.id);
+
+          node.body.body.forEach(n => this.visitor(n, ele));
+        }
+
+        break;
+      }
+
+      case 'ClassProperty': {
+        if (getIdentiferName(node.key) === 'render') {
+          this.visitor(node.value, ele);
+        }
+
+        break;
+      }
+
+      case 'ClassMethod': {
+        if (getIdentiferName(node.key) === 'render') {
+          this.visitor(node.body, ele);
+        }
+
+        break;
+      }
+
+      case 'BlockStatement': {
+        node.body.forEach(statement => {
+          if (statement.type === 'ReturnStatement') {
+            this.visitor(statement.argument, ele);
+          }
+        });
+
+        break;
+      }
+
+      case 'JSXElement': {
+        const usedComponentName = getComponentName(node);
+
+        this.setComponent(ele.componentName, ele.path, ele.parentNode);
+
+        if (usedComponentName) {
+          this.dependencies.addUsedComponent(usedComponentName, {
+            path: ele.path,
+            jsx: node
+          });
+        }
+
+        node.children.forEach(child => this.visitor(child, { path: ele.path }));
+
+        break;
+      }
+    }
+  }
+
+  private checkAST(file: string): void {
+    if (!checkFilePath(file)) return;
+
+    const path = pathResolver.resolve(this.rootDir, file);
+    this.progress[path] = 'progress';
+
+    asyncFunc(() => {
+      const ast = getAST(path);
+
+      ast.forEach(node => this.visitor(node, { path }));
+
+      if (this.progress[path] === 'progress') {
+        this.progress[path] = 'end';
+      }
+
+      if (this.isDone()) {
+        this.done(this.dependencies.getDepedencies());
+      }
+    });
+  }
+
+  public check(): void {
+    this.checkAST(pathResolver.basename(this.file));
+  }
+}
