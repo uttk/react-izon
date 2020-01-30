@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "mocha --r espower-typescript/guess test/**/*.ts",
+    "test": "mocha --r espower-typescript/guess test/**/*.ts"
   },
   "dependencies": {
     "@babel/parser": "^7.8.3"

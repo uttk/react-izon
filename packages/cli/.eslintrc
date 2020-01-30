@@ -2,8 +2,5 @@
   "extends": [
     "oclif",
     "oclif-typescript"
-  ],
-  "rules": {
-    "@typescript-eslint/no-use-before-define": "none"
-  }
+  ]
 }
