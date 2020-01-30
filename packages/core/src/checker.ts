@@ -31,7 +31,7 @@ export class DependencyChecker {
     this.file = file;
     this.done = done;
 
-    if(!result.dir || !result.base){
+    if (!result.dir || !result.base) {
       throw new Error('Invalid file path : ' + file);
     }
   }
@@ -89,7 +89,7 @@ export class DependencyChecker {
           }
         });
 
-        this.checkAST(node.source.value);
+        this.checkAST(node.source.value, ele.path);
         break;
       }
 
@@ -201,13 +201,23 @@ export class DependencyChecker {
 
         break;
       }
+
+      case 'JSXFragment': {
+        this.setComponent(ele.componentName, ele.path, ele.parentNode);
+
+        node.children.forEach(child => this.visitor(child, { path: ele.path }));
+
+        break;
+      }
     }
   }
 
-  private checkAST(file: string): void {
+  private checkAST(file: string, rootPath: string): void {
     if (!checkFilePath(file)) return;
 
-    const path = pathResolver.resolve(this.rootDir, file);
+    const { dir, ext } = pathResolver.parse(rootPath);
+    const path = pathResolver.resolve(ext ? dir : rootPath, file);
+
     this.progress[path] = 'progress';
 
     asyncFunc(() => {
@@ -226,6 +236,6 @@ export class DependencyChecker {
   }
 
   public check(): void {
-    this.checkAST(pathResolver.basename(this.file));
+    this.checkAST(pathResolver.basename(this.file), this.rootDir);
   }
 }
