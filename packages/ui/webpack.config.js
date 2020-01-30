@@ -1,5 +1,5 @@
 const path = require("path");
-const nodeExternals = require('webpack-node-externals');
+const nodeExternals = require("webpack-node-externals");
 
 module.exports = [
   {
@@ -11,6 +11,10 @@ module.exports = [
       path: path.resolve(__dirname, "./public"),
       publicPath: "/",
       filename: "bundle.js"
+    },
+
+    resolve: {
+      extensions: [".js", ".jsx", ".ts", ".tsx"]
     },
 
     module: {
@@ -46,14 +50,14 @@ module.exports = [
 
     output: {
       path: path.resolve(__dirname, "./lib"),
-      publicPath: "/",
-      filename: "index.js"
+      filename: "index.js",
+      libraryTarget: "commonjs"
     },
 
     node: {
       // Need this when working with express, otherwise the build fails
-      __dirname: false,   // if you don't put this is, __dirname
-      __filename: false,  // and __filename return blank or /
+      __dirname: false, // if you don't put this is, __dirname
+      __filename: false // and __filename return blank or /
     },
 
     module: {
@@ -68,7 +72,6 @@ module.exports = [
           }
         }
       ]
-    },
-
+    }
   }
 ];

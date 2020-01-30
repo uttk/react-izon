@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "declaration": true,
+    "importHelpers": true,
     "declarationDir": "./lib",
     "target": "es5",
-    "module": "ESNext",
+    "module": "CommonJS",
     "noImplicitAny": false,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,

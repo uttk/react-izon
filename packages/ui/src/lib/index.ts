@@ -1,28 +1,30 @@
-import open from 'open';
-import express from 'express';
+import * as path from 'path';
+import * as open from 'open';
+import * as express from 'express';
 import { Dependencies } from '@react-izon/core';
 
 const app = express();
 
-interface ReactIzonUIOptions {
+export interface ServerOptions {
   port?: number;
   isOpen?: boolean;
+  listenCallback?: (...args: any[]) => void;
 }
 
-export default function startServer(json : Dependencies, options: ReactIzonUIOptions = {}) {
+export function startServer(json: Dependencies, options: ServerOptions) {
   const { port = 9000, isOpen = true } = options;
 
-  app.use(express.static('public'));
+  app.use(express.static(path.resolve(__dirname, './public')));
 
   app.get('json', (req, res) => {
     res.json(json);
   });
 
-  app.listen(port, () => {
-    console.log('Get starting server!!');
-  });
+  app.listen(port, options.listenCallback);
 
   if (isOpen) {
     open(`http://localhost:${port}`);
   }
 }
+
+export default startServer;
