@@ -12,12 +12,12 @@ class ReactIzon extends Command {
     "react-izon ./app.jsx",
     "react-izon ./app.jsx -p 5000",
     "react-izon ./app.tsx"
-  ]
+  ];
 
   static flags = {
     version: flags.version({ char: "v" }),
     help: flags.help({ char: "h" }),
-    open: flags.boolean({ char: "o", default: true }),
+    open: flags.boolean({ char: "o", default: false }),
     port: flags.string({ char: "p", default: "9000" })
   };
 
