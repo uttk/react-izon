@@ -23,19 +23,28 @@ export const getIdentiferName = (
   return '';
 };
 
+const tryExt = ['.js', '.ts', '.jsx', '.tsx'];
+
+const tryPaths = tryExt.reduce<string[]>((pre, cur) => {
+  return [...pre, cur, `/index${cur}`];
+}, []);
+
 export const checkFilePath = (filePath: string): boolean => {
   if (filePath) {
     const { dir, ext } = path.parse(filePath);
-    return Boolean(dir || ext);
+
+    if (ext) {
+      return Boolean(tryExt.find(v => v === ext));
+    } else {
+      return Boolean(dir);
+    }
   }
 
   return false;
 };
 
-const tryExe = ['.js', '.ts', '.jsx', '.tsx'];
-
 export const getAST = (path: string): babelTypes.Statement[] => {
-  for (const exe of tryExe) {
+  for (const exe of tryPaths) {
     try {
       const readFilePath = /\.(js|ts)x?$/.test(path) ? path : `${path}${exe}`;
       const code = fs.readFileSync(readFilePath, 'utf8');
