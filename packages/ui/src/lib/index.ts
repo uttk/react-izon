@@ -16,7 +16,7 @@ export function startServer(json: Dependencies, options: ServerOptions) {
 
   app.use(express.static(path.resolve(__dirname, './public')));
 
-  app.get('json', (req, res) => {
+  app.get('/json', (req, res) => {
     res.json(json);
   });
 

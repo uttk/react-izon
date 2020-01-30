@@ -1,0 +1,47 @@
+.side_bar {
+  width: 250px;
+  background: rgb(7, 28, 49);
+  margin: 0;
+  height: 100%;
+  color: white;
+}
+
+.header {
+  padding: 8px 16px;
+  font-size: 1.17em;
+  font-weight: bold;
+}
+
+.container {
+  margin: 16px 8px;
+}
+
+.list {
+  margin: 0;
+  list-style: none;
+  padding: 8px 16px;
+}
+
+.list_item {
+  padding: 8px 16px;
+
+  &:hover {
+    background: #112c48;
+  }
+}
+
+.list_label {
+  margin: 0;
+}
+
+.search_input {
+  width: 80%;
+  height: 32px;
+  background: #192531;
+  border-radius: 16px;
+  padding: 4px;
+  border: none;
+  padding-left: 16px;
+  color: white;
+  outline: none;
+}

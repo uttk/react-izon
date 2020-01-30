@@ -7,8 +7,10 @@ module.exports = [
 
     mode: "production",
 
+    target: "web",
+
     output: {
-      path: path.resolve(__dirname, "./public"),
+      path: path.resolve(__dirname, "./lib/public"),
       publicPath: "/",
       filename: "bundle.js"
     },
@@ -24,7 +26,7 @@ module.exports = [
           use: "ts-loader"
         },
         {
-          test: /\.s[ac]ss$/i,
+          test: /\.module\.scss$/i,
           loader: [
             "style-loader",
             {
@@ -35,6 +37,10 @@ module.exports = [
             },
             "sass-loader"
           ]
+        },
+        {
+          test: /\.css$/i,
+          loader: ["style-loader", "css-loader"]
         }
       ]
     }
