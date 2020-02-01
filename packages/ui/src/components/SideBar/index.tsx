@@ -1,25 +1,11 @@
 import * as React from 'react';
-import { Dependency, Dependencies } from '@react-izon/core';
 import styles from './SideBar.module.scss';
-import { AppContext } from '../uses';
+import { useSideBar } from './use';
 
-interface SideBarProps {
-  dependencies: Dependencies;
-}
-
-export const SideBar: React.FC<SideBarProps> = ({ dependencies }) => {
-  const [input, setInput] = React.useState('');
-  const [list, setList] = React.useState<Dependency[]>([]);
-  const { dispatch } = React.useContext(AppContext);
-
-  React.useEffect(() => {
-    const newList = Object.values(dependencies).reduce<Dependency[]>(
-      (pre, cur) => (cur && cur.name.includes(input) ? pre.concat(cur) : pre),
-      [],
-    );
-
-    setList(newList);
-  }, [dependencies, input]);
+export const SideBar: React.FC = () => {
+  const {
+    list, input, setInput, dispatch,
+  } = useSideBar();
 
   return (
     <div className={styles.side_bar}>
