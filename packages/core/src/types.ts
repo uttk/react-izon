@@ -1,6 +1,7 @@
 import * as babelTypes from '@babel/types';
 
 export interface UsedComponent {
+  parentName: string;
   path: string;
   jsx: babelTypes.JSXElement;
 }
