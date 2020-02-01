@@ -4,6 +4,7 @@ import { SideBar } from '../SideBar';
 import { useDependencies } from '../uses/useDependencies';
 import { useApp, AppContext } from '../uses';
 import styles from './App.module.scss';
+import { Dashbaord } from '../Dashboard';
 
 export const App = () => {
   const { store, dispatch } = useApp();
@@ -19,7 +20,7 @@ export const App = () => {
         <div className={styles.body}>
           {
             store.selectedDependency
-              ? null
+              ? (<Dashbaord />)
               : (<Home />)
           }
 

@@ -8,7 +8,7 @@ export const useDependencies = () => {
   React.useEffect(() => {
     const onError = () => setError('Can not found Component Dependency');
 
-    fetch('/json')
+    fetch('/dependencies')
       .then((res) => res
         .json()
         .then(setJSON)

@@ -1,0 +1,12 @@
+
+
+.link {
+  color: rgb(116, 116, 116);
+  border-bottom: 1px solid rgb(116, 116, 116);
+  cursor: default;
+
+  &:hover {
+    color: white;
+    border-color: white;
+  }
+}
