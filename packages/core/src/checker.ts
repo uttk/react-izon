@@ -190,14 +190,15 @@ export class DependencyChecker {
 
         this.setComponent(ele.componentName, ele.path, ele.parentNode);
 
-        if (usedComponentName) {
+        if (usedComponentName && ele.componentName) {
           this.dependencies.addUsedComponent(usedComponentName, {
+            parentName: ele.componentName,
             path: ele.path,
             jsx: node
           });
         }
 
-        node.children.forEach(child => this.visitor(child, { path: ele.path }));
+        node.children.forEach(child => this.visitor(child, ele));
 
         break;
       }
@@ -205,7 +206,7 @@ export class DependencyChecker {
       case 'JSXFragment': {
         this.setComponent(ele.componentName, ele.path, ele.parentNode);
 
-        node.children.forEach(child => this.visitor(child, { path: ele.path }));
+        node.children.forEach(child => this.visitor(child, ele));
 
         break;
       }
