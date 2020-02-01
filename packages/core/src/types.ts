@@ -13,6 +13,7 @@ export type ComponentDefined =
   | babelTypes.ExportDefaultDeclaration;
 
 export interface Dependency {
+  name: string;
   rootPath: string;
   defined?: ComponentDefined;
   used: UsedComponent[];
