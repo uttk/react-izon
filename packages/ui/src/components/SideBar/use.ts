@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Dependency } from '@react-izon/core';
-import { AppContext } from '../uses';
+import { AppContext } from '../util';
 
 export const useSideBar = () => {
   const { store: { dependencies }, dispatch } = React.useContext(AppContext);

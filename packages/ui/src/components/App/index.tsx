@@ -3,7 +3,7 @@ import { Home } from '../Home';
 import { useApp } from './use';
 import { SideBar } from '../SideBar';
 import { Dashboard } from '../Dashboard';
-import { AppContext } from '../uses';
+import { AppContext } from '../util';
 import styles from './App.module.scss';
 
 export const App = () => {

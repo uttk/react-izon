@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Dependencies } from '@react-izon/core';
-import { reducer, Store } from '../uses';
+import { reducer, Store } from '../util';
 
 export const useApp = () => {
   const [store, dispatch] = React.useReducer(reducer, Store);
