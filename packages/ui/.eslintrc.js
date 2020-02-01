@@ -30,6 +30,9 @@ module.exports = {
     "react/jsx-filename-extension": "off",
     "@typescript-eslint/no-unused-vars": "error",
     "semi": ["error", "always"],
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "arrow-body-style": "off"
   }
 };
