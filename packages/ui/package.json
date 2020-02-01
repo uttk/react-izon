@@ -15,17 +15,20 @@
     "lib"
   ],
   "scripts": {
-    "build": "webpack --config ./webpack.config.js --progress",
-    "watch": "webpack --config ./webpack.config.js --progress --watch",
+    "build": "cross-env NODE_ENV=production webpack --config ./webpack.config.js --progress",
+    "dev:build": "cross-env NODE_ENV=development webpack --config ./webpack.config.js --progress",
+    "watch": "cross-env NODE_ENV=development webpack --config ./webpack.config.js --progress --watch",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "dependencies": {
     "@babel/generator": "^7.8.4",
     "@react-izon/core": "^0.0.0",
+    "chart.js": "^2.9.3",
     "express": "^4.17.1",
     "open": "^7.0.0",
     "prettier": "^1.19.1",
     "react": "^16.12.0",
+    "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.12.0",
     "react-syntax-highlighter": "^12.2.1"
   },
@@ -38,6 +41,7 @@
     "@types/react-syntax-highlighter": "^11.0.4",
     "@typescript-eslint/eslint-plugin": "^2.17.0",
     "@typescript-eslint/parser": "^2.17.0",
+    "cross-env": "^7.0.0",
     "css-loader": "^3.4.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "18.0.1",

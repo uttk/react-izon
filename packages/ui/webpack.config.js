@@ -1,11 +1,13 @@
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 
+const mode = process.env.NODE_ENV || "development";
+
 module.exports = [
   {
     entry: path.resolve("src/components/index.tsx"),
 
-    mode: "production",
+    mode,
 
     target: "web",
 
@@ -48,7 +50,7 @@ module.exports = [
   {
     entry: path.resolve("src/lib/index.ts"),
 
-    mode: "production",
+    mode,
 
     target: "node",
 
