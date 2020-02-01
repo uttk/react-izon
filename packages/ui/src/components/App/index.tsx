@@ -1,34 +1,31 @@
 import * as React from 'react';
-import { Dependencies } from '@react-izon/core';
+import { Home } from '../Home';
 import { SideBar } from '../SideBar';
+import { useDependencies } from '../uses/useDependencies';
+import { useApp, AppContext } from '../uses';
 import styles from './App.module.scss';
 
 export const App = () => {
-  const [json, setJSON] = React.useState<Dependencies>({});
-  const [error, setError] = React.useState<string>('');
-
-  React.useEffect(() => {
-    const onError = () => setError('Can not found Component Dependency');
-
-    fetch('/json')
-      .then((res) => res
-        .json()
-        .then(setJSON)
-        .catch(onError))
-      .catch(onError);
-  }, []);
+  const { store, dispatch } = useApp();
+  const { dependencies, error } = useDependencies();
 
   return (
-    <>
+    <AppContext.Provider value={{ store, dispatch }}>
       {error || null}
 
       <div className={styles.container}>
-        <SideBar componentNames={Object.keys(json)} />
+        <SideBar dependencies={dependencies} />
 
         <div className={styles.body}>
-          <h1 className={styles.title}>Hello World</h1>
+          {
+            store.selectedDependency
+              ? null
+              : (<Home />)
+          }
+
+
         </div>
       </div>
-    </>
+    </AppContext.Provider>
   );
 };

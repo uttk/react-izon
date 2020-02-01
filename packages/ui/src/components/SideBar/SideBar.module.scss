@@ -30,6 +30,12 @@
   }
 }
 
+.selected_list_item {
+  @extend .list_item;
+
+  background: #112c48;
+}
+
 .list_label {
   margin: 0;
 }
