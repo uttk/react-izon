@@ -9,6 +9,7 @@ export class ComponentDependencies {
     if (dep) return dep;
 
     return {
+      name,
       rootPath: '',
       used: []
     };
