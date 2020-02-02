@@ -1,12 +1,34 @@
 {
   "name": "react-izon",
-  "description": "Dependency analysis tool of React Components",
   "version": "0.0.0",
-  "author": "uttk @uttk",
+  "description": "A cli tool that analyzes the dependency of React Component",
+  "author": "uttk <uttk8128@gmail.com> (https://github.com/uttk)",
+  "license": "MIT",
+  "main": "lib/index.js",
   "bin": {
     "react-izon": "./bin/run"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uttk/react-izon.git"
+  },
+  "homepage": "https://github.com/uttk/react-izon",
   "bugs": "https://github.com/uttk/react-izon/issues",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "files": [
+    "/bin",
+    "/lib"
+  ],
+  "scripts": {
+    "build": "rimraf lib && tsc -b",
+    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "prepack": "rimraf lib && tsc -b && oclif-dev readme",
+    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif-dev readme && git add README.md"
+  },
   "dependencies": {
     "@oclif/command": "^1",
     "@oclif/config": "^1",
@@ -36,25 +58,18 @@
   "engines": {
     "node": ">=8.0.0"
   },
-  "files": [
-    "/bin",
-    "/lib"
-  ],
-  "homepage": "https://github.com/uttk/react-izon",
   "keywords": [
-    "oclif"
+    "react-izon",
+    "react",
+    "izon",
+    "dependency",
+    "cli",
+    "tool",
+    "component",
+    "analyze"
   ],
-  "license": "MIT",
-  "main": "lib/index.js",
   "oclif": {
     "bin": "react-izon"
-  },
-  "repository": "uttk/react-izon",
-  "scripts": {
-    "posttest": "eslint . --ext .ts --config .eslintrc",
-    "prepack": "rimraf lib && tsc -b && oclif-dev readme",
-    "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
-    "version": "oclif-dev readme && git add README.md"
   },
   "types": "lib/index.d.ts"
 }

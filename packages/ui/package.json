@@ -2,11 +2,16 @@
   "name": "@react-izon/ui",
   "private": true,
   "version": "0.0.0",
-  "description": "> TODO: description",
-  "author": "uttk <uttk8128@gmail.com>",
-  "homepage": "",
+  "description": "Show React Component dependencies in browser",
+  "author": "uttk <uttk8128@gmail.com> (https://github.com/uttk)",
   "license": "MIT",
   "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uttk/react-izon.git"
+  },
+  "homepage": "https://github.com/uttk/react-izon",
+  "bugs": "https://github.com/uttk/react-izon/issues",
   "directories": {
     "lib": "lib",
     "test": "test"
@@ -60,5 +65,17 @@
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "webpack-node-externals": "^1.7.2"
-  }
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "keywords": [
+    "react-izon",
+    "react",
+    "izon",
+    "dependency",
+    "component",
+    "analyze"
+  ],
+  "types": "lib/index.d.ts"
 }

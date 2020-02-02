@@ -2,11 +2,16 @@
   "name": "@react-izon/core",
   "private": true,
   "version": "0.0.0",
-  "description": "> TODO: description",
-  "author": "uttk <uttk8128@gmail.com>",
-  "homepage": "",
+  "description": "Analyze React Component dependencies from AST",
+  "author": "uttk <uttk8128@gmail.com> (https://github.com/uttk)",
   "license": "MIT",
   "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uttk/react-izon.git"
+  },
+  "homepage": "https://github.com/uttk/react-izon",
+  "bugs": "https://github.com/uttk/react-izon/issues",
   "directories": {
     "lib": "lib",
     "test": "test"
@@ -31,5 +36,17 @@
     "mocha": "^7.0.1",
     "power-assert": "^1.6.1",
     "typescript": "^3.7.5"
-  }
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "keywords": [
+    "react-izon",
+    "react",
+    "izon",
+    "dependency",
+    "component",
+    "analyze"
+  ],
+  "types": "lib/index.d.ts"
 }
