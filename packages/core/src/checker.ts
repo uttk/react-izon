@@ -1,44 +1,48 @@
-import * as pathResolver from 'path';
+import * as path from 'path';
 import * as babelTypes from '@babel/types';
-import { CheckStatus, DoneCallback } from './types';
-import {
-  asyncFunc,
-  getAST,
-  getComponentName,
-  getIdentiferName,
-  checkFilePath
-} from './util';
+import { EventCallback, CheckStatus, VisitorElements } from './types';
 import { ComponentDependencies } from './dependencies';
-
-interface VisitorElements {
-  path: string;
-  componentName?: string;
-  parentNode?: babelTypes.Node;
-}
+import {
+  getAST,
+  asyncFunc,
+  resolvePath,
+  isComonentFile,
+  getComponentName,
+  getIdentiferName
+} from './util';
 
 export class DependencyChecker {
   private readonly file: string = '';
-  private readonly rootDir: string = '';
+  private readonly rootPath: string = '';
 
   private dependencies = new ComponentDependencies();
-  private progress: { [path: string]: CheckStatus } = {};
-  private done: DoneCallback;
+  private checkStatus: { [path: string]: CheckStatus } = {};
+  private eventCallback: EventCallback;
   private replaceNameList: { [path: string]: string | undefined } = {};
 
-  constructor(file: string, done: DoneCallback) {
-    const result = pathResolver.parse(file);
-    this.rootDir = result.dir;
+  constructor(file: string, callback: EventCallback) {
+    const resolved = resolvePath(file);
     this.file = file;
-    this.done = done;
+    this.rootPath = resolved || file;
+    this.eventCallback = callback;
 
-    if (!result.dir || !result.base) {
-      throw new Error('Invalid file path : ' + file);
+    if (!resolved) {
+      this.checkStatus[this.rootPath] = 'error';
     }
   }
 
+  private onCheckError(baseFile: string, file: string, error: Error): void {
+    this.checkStatus[file] = 'error';
+    this.eventCallback({ type: 'check-error', error, path: baseFile, file });
+  }
+
   private isDone(): boolean {
-    for (const key in this.progress) {
-      if (this.progress[key] !== 'end') return false;
+    for (const key in this.checkStatus) {
+      const status = this.checkStatus[key];
+
+      if (status === 'progress') {
+        return false;
+      }
     }
 
     return true;
@@ -55,13 +59,7 @@ export class DependencyChecker {
       this.dependencies.setRootPath(name, path);
     }
 
-    if (
-      babelTypes.isClassDeclaration(node) ||
-      babelTypes.isVariableDeclaration(node) ||
-      babelTypes.isFunctionDeclaration(node) ||
-      babelTypes.isExportNamedDeclaration(node) ||
-      babelTypes.isExportDefaultDeclaration(node)
-    ) {
+    if (this.dependencies.isDefinedNode(node)) {
       this.dependencies.setDefined(name, node);
     }
   }
@@ -76,25 +74,24 @@ export class DependencyChecker {
 
     switch (node.type) {
       case 'ImportDeclaration': {
-        node.specifiers.forEach(spec => {
-          if (
-            spec.type === 'ImportDefaultSpecifier' &&
-            checkFilePath(node.source.value)
-          ) {
-            const path = pathResolver.resolve(this.rootDir, node.source.value);
+        if (!isComonentFile(node.source.value)) return;
 
-            if (!this.replaceNameList[path]) {
-              this.replaceNameList[path] = spec.local.name;
+        node.specifiers.forEach(spec => {
+          if (spec.type === 'ImportDefaultSpecifier') {
+            const file = resolvePath(node.source.value, ele.root);
+
+            if (!this.replaceNameList[file] && file) {
+              this.replaceNameList[file] = spec.local.name;
             }
           }
         });
 
-        this.checkAST(node.source.value, ele.path);
+        this.checkAST(node.source.value, ele.root);
         break;
       }
 
       case 'ExportDefaultDeclaration': {
-        const name = this.replaceNameList[ele.path];
+        const name = this.replaceNameList[ele.file];
 
         if (name) {
           ele.parentNode = node;
@@ -188,12 +185,12 @@ export class DependencyChecker {
       case 'JSXElement': {
         const usedComponentName = getComponentName(node);
 
-        this.setComponent(ele.componentName, ele.path, ele.parentNode);
+        this.setComponent(ele.componentName, ele.root, ele.parentNode);
 
         if (usedComponentName && ele.componentName) {
           this.dependencies.addUsedComponent(usedComponentName, {
             parentName: ele.componentName,
-            path: ele.path,
+            path: ele.file,
             jsx: node
           });
         }
@@ -204,7 +201,7 @@ export class DependencyChecker {
       }
 
       case 'JSXFragment': {
-        this.setComponent(ele.componentName, ele.path, ele.parentNode);
+        this.setComponent(ele.componentName, ele.root, ele.parentNode);
 
         node.children.forEach(child => this.visitor(child, ele));
 
@@ -213,30 +210,64 @@ export class DependencyChecker {
     }
   }
 
-  private checkAST(file: string, rootPath: string): void {
-    if (!checkFilePath(file)) return;
+  private checkAST(baseFile: string, rootPath?: string): void {
+    const file = resolvePath(baseFile, rootPath);
 
-    const { dir, ext } = pathResolver.parse(rootPath);
-    const path = pathResolver.resolve(ext ? dir : rootPath, file);
+    if (!file) return;
 
-    this.progress[path] = 'progress';
+    this.checkStatus[file] = 'progress';
+    this.eventCallback({ type: 'check-start', path: baseFile, file });
 
     asyncFunc(() => {
-      const ast = getAST(path);
+      const result = getAST(file);
 
-      ast.forEach(node => this.visitor(node, { path }));
+      if (result instanceof Error) {
+        this.onCheckError(baseFile, file, result);
+      } else {
+        const elements = { root: path.dirname(file), file };
 
-      if (this.progress[path] === 'progress') {
-        this.progress[path] = 'end';
+        result.forEach(node => this.visitor(node, elements));
+
+        if (this.checkStatus[file] === 'progress') {
+          this.checkStatus[file] = 'end';
+          this.eventCallback({ type: 'check-end', path: baseFile, file });
+        }
       }
 
       if (this.isDone()) {
-        this.done(this.dependencies.getDepedencies());
+        const dependencies = this.dependencies.getDepedencies();
+        this.eventCallback({ type: 'done', dependencies });
       }
     });
   }
 
+  public getCheckStatus(): { [path: string]: CheckStatus } {
+    return { ...this.checkStatus };
+  }
+
   public check(): void {
-    this.checkAST(pathResolver.basename(this.file), this.rootDir);
+    const status = this.checkStatus[this.rootPath];
+
+    switch (status) {
+      case 'error':
+        this.onCheckError(
+          this.file,
+          this.rootPath,
+          new Error('Invalid file path : ' + this.rootPath)
+        );
+        break;
+
+      case 'progress':
+        this.eventCallback({
+          type: 'error',
+          error: new Error('Already running')
+        });
+        break;
+
+      default:
+        this.eventCallback({ type: 'start' });
+        this.checkAST(this.rootPath);
+        break;
+    }
   }
 }

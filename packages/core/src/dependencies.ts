@@ -1,4 +1,10 @@
-import { Dependencies, Dependency, UsedComponent } from './types';
+import * as babelTypes from '@babel/types';
+import {
+  Dependencies,
+  Dependency,
+  UsedComponent,
+  ComponentDefined
+} from './types';
 
 export class ComponentDependencies {
   private dependencies: Dependencies = {};
@@ -13,6 +19,20 @@ export class ComponentDependencies {
       rootPath: '',
       used: []
     };
+  }
+
+  public isDefinedNode(
+    node: babelTypes.Node | null | void
+  ): node is ComponentDefined {
+    if (!node) return false;
+
+    return (
+      babelTypes.isClassDeclaration(node) ||
+      babelTypes.isVariableDeclaration(node) ||
+      babelTypes.isFunctionDeclaration(node) ||
+      babelTypes.isExportNamedDeclaration(node) ||
+      babelTypes.isExportDefaultDeclaration(node)
+    );
   }
 
   public setRootPath(name: string, rootPath: string): void {
@@ -37,6 +57,14 @@ export class ComponentDependencies {
   }
 
   public getDepedencies(): Dependencies {
-    return { ...this.dependencies };
+    const result: Dependencies = {};
+
+    Object.values(this.dependencies).forEach(dependency => {
+      if (dependency.defined) {
+        result[dependency.name] = dependency;
+      }
+    });
+
+    return result;
   }
 }

@@ -29,37 +29,48 @@ const tryPaths = tryExt.reduce<string[]>((pre, cur) => {
   return [...pre, cur, `/index${cur}`];
 }, []);
 
-export const checkFilePath = (filePath: string): boolean => {
-  if (filePath) {
-    const { dir, ext } = path.parse(filePath);
+export const isComonentFile = (relativePath: string): boolean => {
+  if (!/^\.{1,2}\//.test(relativePath)) return false;
 
-    if (ext) {
-      return Boolean(tryExt.find(v => v === ext));
-    } else {
-      return Boolean(dir);
-    }
-  }
+  const ext = path.extname(relativePath);
 
-  return false;
+  return ext ? !!tryExt.find(v => v === ext) : true;
 };
 
-export const getAST = (path: string): babelTypes.Statement[] => {
+export const resolvePath = (baseFile: string, rootPath = ''): string => {
+  const ext = path.extname(baseFile);
+
+  if (ext && !tryExt.find(v => v === ext)) {
+    return '';
+  }
+
+  const file = path.resolve(rootPath, baseFile);
+
   for (const exe of tryPaths) {
     try {
-      const readFilePath = /\.(js|ts)x?$/.test(path) ? path : `${path}${exe}`;
-      const code = fs.readFileSync(readFilePath, 'utf8');
-      const ast = babelParser.parse(code, {
-        sourceType: 'module',
-        plugins: ['jsx', 'typescript']
-      }).program.body;
+      const readFilePath = /\.(js|ts)x?$/.test(file) ? file : `${file}${exe}`;
 
-      return ast;
+      fs.statSync(readFilePath);
+
+      return readFilePath;
     } catch {} // eslint-disable-line no-empty
   }
 
-  console.error('can not read this file : ' + path);
+  return '';
+};
 
-  return [];
+export const getAST = (file: string): babelTypes.Statement[] | Error => {
+  try {
+    const code = fs.readFileSync(file, 'utf8');
+    const ast = babelParser.parse(code, {
+      sourceType: 'module',
+      plugins: ['jsx', 'typescript']
+    }).program.body;
+
+    return ast;
+  } catch {} // eslint-disable-line no-empty
+
+  return new Error('can not read this file : ' + path);
 };
 
 export const asyncFunc = (cb: Function): Promise<void> => {
