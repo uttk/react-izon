@@ -1,11 +1,39 @@
-# `core`
+# @react-izon/core
 
-> TODO: description
+Analyze Dependency of React Component with AST obtained from [@babel/parser](https://www.npmjs.com/package/@babel/parser)
+
+## Install
+
+Install with [npm](https://www.npmjs.com/)
+
+```bash
+$> npm install @react-izon/core
+```
+
+Install with [yarn](https://classic.yarnpkg.com/)
+
+```bash
+$> yarn add @react-izon/core
+```
 
 ## Usage
 
-```
-const core = require('core');
+```javascript
+import { DependencyChecker } from "@react-izon/core"
 
-// TODO: DEMONSTRATE API
+const checker = new DependencyChecker( analyze_file_path, event => {
+
+  if(event.type === "done"){
+    const { dependencies } = event;
+
+    // something
+  }
+
+})
+
+checker.check()
 ```
+
+# License
+
+[MIT](LICENSE "LICENSE")
