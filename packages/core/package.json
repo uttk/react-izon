@@ -1,6 +1,5 @@
 {
   "name": "@react-izon/core",
-  "private": true,
   "version": "0.0.0",
   "description": "Analyze React Component dependencies from AST",
   "author": "uttk <uttk8128@gmail.com> (https://github.com/uttk)",

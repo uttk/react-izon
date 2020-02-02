@@ -1,6 +1,5 @@
 {
   "name": "@react-izon/ui",
-  "private": true,
   "version": "0.0.0",
   "description": "Show React Component dependencies in browser",
   "author": "uttk <uttk8128@gmail.com> (https://github.com/uttk)",
