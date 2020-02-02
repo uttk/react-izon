@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Dependency, Dependencies, UsedComponent } from '@react-izon/core';
 
 export type Action =
+  | { type: 'reset-dependency' }
   | { type: 'set-error'; payload: string }
   | { type: 'set-dependencies'; payload: Dependencies }
   | { type: 'select-component'; payload: Dependency | null };
@@ -20,6 +21,10 @@ export const Store: StoreType = {
 
 export const reducer = (store: StoreType, action: Action): StoreType => {
   switch (action.type) {
+    case 'reset-dependency': {
+      return { ...store, selectedDependency: null };
+    }
+
     case 'set-dependencies': {
       return { ...store, dependencies: action.payload };
     }

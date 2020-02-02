@@ -3,9 +3,13 @@ import { Dependency } from '@react-izon/core';
 import { AppContext } from '../util';
 
 export const useSideBar = () => {
-  const { store: { dependencies }, dispatch } = React.useContext(AppContext);
+  const {
+    store: { dependencies },
+    dispatch,
+  } = React.useContext(AppContext);
   const [input, setInput] = React.useState('');
   const [list, setList] = React.useState<Dependency[]>([]);
+  const toHome = () => dispatch({ type: 'reset-dependency' });
 
   React.useEffect(() => {
     const newList = Object.values(dependencies).reduce<Dependency[]>(
@@ -19,6 +23,7 @@ export const useSideBar = () => {
   return {
     list,
     input,
+    toHome,
     setInput,
     dispatch,
   };

@@ -4,13 +4,19 @@ import { useSideBar } from './use';
 
 export const SideBar: React.FC = () => {
   const {
-    list, input, setInput, dispatch,
+    list, input, toHome, setInput, dispatch,
   } = useSideBar();
 
   return (
     <div className={styles.side_bar}>
       <div className={styles.container}>
-        <h3 className={styles.header}>Dashboard</h3>
+        <h3
+          className={styles.header}
+          style={{ cursor: 'pointer' }}
+          onClick={toHome}
+        >
+          Dashboard
+        </h3>
       </div>
 
       <div className={styles.container}>
