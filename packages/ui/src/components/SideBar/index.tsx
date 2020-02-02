@@ -10,7 +10,7 @@ export const SideBar: React.FC = () => {
   return (
     <div className={styles.side_bar}>
       <div className={styles.container}>
-        <header className={styles.header}>Dashboard</header>
+        <h3 className={styles.header}>Dashboard</h3>
       </div>
 
       <div className={styles.container}>
@@ -25,7 +25,7 @@ export const SideBar: React.FC = () => {
       </div>
 
       <div className={styles.container}>
-        <header className={styles.header}>Comopnents</header>
+        <h3 className={styles.header}>Comopnents</h3>
 
         <ul className={styles.list}>
           {list.map((dep) => (

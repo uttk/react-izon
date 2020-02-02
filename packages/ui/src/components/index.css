@@ -14,14 +14,15 @@ body {
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
-  background: #1a1a1d;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-track {
   border: none;
   box-shadow: none;
-  background: #1a1a1d;
-  }
+  border-radius: 10px;
+  background: transparent;
+}
 
 ::-webkit-scrollbar-thumb {
   background: rgba(50, 50, 50, 0.5);
