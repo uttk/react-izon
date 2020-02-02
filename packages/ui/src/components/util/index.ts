@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dependency, Dependencies } from '@react-izon/core';
+import { Dependency, Dependencies, UsedComponent } from '@react-izon/core';
 
 export type Action =
   | { type: 'set-error'; payload: string }
@@ -37,3 +37,13 @@ export const AppContext = React.createContext({
   store: Store,
   dispatch: defaultDispatch,
 });
+
+export const getUsedTimes = (dep: Dependency) => {
+  return dep.used.reduce<UsedComponent[]>((pre, cur) => {
+    if (pre.find((v) => v.parentName === cur.parentName)) {
+      return pre;
+    }
+
+    return pre.concat(cur);
+  }, []).length;
+};
