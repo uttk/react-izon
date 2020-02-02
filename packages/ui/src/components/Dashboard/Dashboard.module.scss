@@ -1,4 +1,33 @@
+.dashboard {
+  width: 100%;
+  margin: 32px 64px;
+}
 
+.container {
+  margin-right: 32px;
+}
+
+.graph {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  min-width: 350px;
+  min-height: 350px;
+  background: rgb(29, 31, 33);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.flex_container {
+  margin: 16px 0px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.label {
+  font-size: 1em;
+  color: rgb(116, 116, 116);
+  font-weight: bold;
+}
 
 .link {
   color: rgb(116, 116, 116);

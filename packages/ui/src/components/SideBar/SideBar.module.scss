@@ -2,8 +2,9 @@
   width: 250px;
   background: rgb(7, 28, 49);
   margin: 0;
-  height: 100%;
   color: white;
+  position: fixed;
+  height: 100vh;
 }
 
 .header {
@@ -20,6 +21,8 @@
   margin: 0;
   list-style: none;
   padding: 8px 16px;
+  height: calc(100vh - 230px);
+  overflow-y: scroll;
 }
 
 .list_item {
@@ -40,6 +43,11 @@
   margin: 0;
 }
 
+.list_bottom {
+  width: 100%;
+  height: 128px;
+}
+
 .search_input {
   width: 80%;
   height: 32px;
@@ -50,4 +58,5 @@
   padding-left: 16px;
   color: white;
   outline: none;
+  margin-left: 8px;
 }
