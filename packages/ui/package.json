@@ -1,5 +1,5 @@
 {
-  "name": "@react-izon/ui",
+  "name": "react-izon-ui",
   "version": "0.0.1",
   "description": "Show React Component dependencies in browser",
   "author": "uttk <uttk8128@gmail.com> (https://github.com/uttk)",
@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "@babel/generator": "^7.8.4",
-    "@react-izon/core": "^0.0.1",
     "chart.js": "^2.9.3",
     "express": "^4.17.1",
     "google-palette": "^1.1.0",
@@ -38,6 +37,7 @@
     "react": "^16.12.0",
     "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.12.0",
+    "react-izon-core": "^0.0.1",
     "react-syntax-highlighter": "^12.2.1"
   },
   "devDependencies": {

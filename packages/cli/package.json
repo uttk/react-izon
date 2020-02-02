@@ -36,9 +36,9 @@
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^2",
-    "@react-izon/core": "^0.0.1",
-    "@react-izon/ui": "^0.0.1",
     "colors": "^1.4.0",
+    "react-izon-core": "^0.0.1",
+    "react-izon-ui": "^0.0.1",
     "tslib": "^1"
   },
   "devDependencies": {

@@ -7,13 +7,13 @@ A cli tool that analyzes the dependency of React Component
 Install with [npm](https://www.npmjs.com/)
 
 ```bash
-$> npm install -g @react-izon/ui
+$> npm install -g react-izon-ui
 ```
 
 Install with [yarn](https://classic.yarnpkg.com/)
 
 ```bash
-$> yarn global add @react-izon/ui
+$> yarn global add react-izon-ui
 ```
 
 # Usage

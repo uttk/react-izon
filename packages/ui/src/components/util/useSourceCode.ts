@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dependency } from '@react-izon/core';
+import { Dependency } from 'react-izon-core';
 
 
 export const useDefinedSourceCode = (dependency: Dependency) => {

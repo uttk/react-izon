@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dependency, Dependencies, UsedComponent } from '@react-izon/core';
+import { Dependency, Dependencies, UsedComponent } from 'react-izon-core';
 
 export type Action =
   | { type: 'reset-dependency' }

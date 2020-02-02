@@ -1,4 +1,4 @@
-# @react-izon/core
+# react-izon-core
 
 Analyze Dependency of React Component with AST obtained from [@babel/parser](https://www.npmjs.com/package/@babel/parser)
 
@@ -7,19 +7,19 @@ Analyze Dependency of React Component with AST obtained from [@babel/parser](htt
 Install with [npm](https://www.npmjs.com/)
 
 ```bash
-$> npm install @react-izon/core
+$> npm install react-izon-core
 ```
 
 Install with [yarn](https://classic.yarnpkg.com/)
 
 ```bash
-$> yarn add @react-izon/core
+$> yarn add react-izon-core
 ```
 
 ## Usage
 
 ```javascript
-import { DependencyChecker } from "@react-izon/core"
+import { DependencyChecker } from "react-izon-core"
 
 const checker = new DependencyChecker( analyze_file_path, event => {
 

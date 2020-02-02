@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dependencies } from '@react-izon/core';
+import { Dependencies } from 'react-izon-core';
 import { reducer, Store } from '../util';
 
 export const useApp = () => {

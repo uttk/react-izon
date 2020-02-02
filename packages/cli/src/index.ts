@@ -2,8 +2,8 @@ import cli from "cli-ux";
 import * as colors from "colors";
 import { SingleBar } from "cli-progress";
 import { Command, flags } from "@oclif/command";
-import { DependencyChecker } from "@react-izon/core";
-import { startServer, ServerOptions } from "@react-izon/ui";
+import { DependencyChecker } from "react-izon-core";
+import { startServer, ServerOptions } from "react-izon-ui";
 
 class ReactIzon extends Command {
   static description = `

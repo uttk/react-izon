@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as palette from 'google-palette';
-import { Dependencies } from '@react-izon/core';
+import { Dependencies } from 'react-izon-core';
 import { ChartOptions } from 'chart.js';
 import { AppContext } from '../util';
 

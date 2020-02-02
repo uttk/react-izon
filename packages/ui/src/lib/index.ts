@@ -3,7 +3,7 @@ import * as open from 'open';
 import * as express from 'express';
 import * as prettier from 'prettier';
 import generator from '@babel/generator';
-import { Dependency, Dependencies } from '@react-izon/core';
+import { Dependency, Dependencies } from 'react-izon-core';
 
 const app = express();
 
