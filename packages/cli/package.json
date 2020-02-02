@@ -36,6 +36,7 @@
     "@oclif/command": "^1",
     "@oclif/config": "^1",
     "@oclif/plugin-help": "^2",
+    "cli-ux": "^5.4.4",
     "colors": "^1.4.0",
     "react-izon-core": "^0.0.2",
     "react-izon-ui": "^0.0.2",
