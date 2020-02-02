@@ -29,3 +29,7 @@ body {
   border-radius: 10px;
   box-shadow: none;
 }
+
+::-webkit-scrollbar-corner {
+  background-color: transparent;
+}
