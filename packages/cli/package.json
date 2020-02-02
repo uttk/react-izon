@@ -1,6 +1,6 @@
 {
   "name": "react-izon",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A cli tool that analyzes the dependency of React Component",
   "author": "uttk <uttk8128@gmail.com> (https://github.com/uttk)",
   "license": "MIT",
@@ -38,8 +38,8 @@
     "@oclif/plugin-help": "^2",
     "cli-ux": "^5.4.4",
     "colors": "^1.4.0",
-    "react-izon-core": "^0.0.2",
-    "react-izon-ui": "^0.0.2",
+    "react-izon-core": "^0.0.3",
+    "react-izon-ui": "^0.0.3",
     "tslib": "^1"
   },
   "devDependencies": {
