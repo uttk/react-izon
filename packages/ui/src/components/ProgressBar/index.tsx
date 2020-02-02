@@ -38,24 +38,17 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     height: stroke * 10,
   };
 
-  const updatePercent = (timestamp: number, start?: number) => {
-    if (!start) {
-      requestAnimationFrame((t) => updatePercent(t, timestamp));
+  const updatePercent = (start: number) => requestAnimationFrame((timestamp: number) => {
+    const progress = timestamp - start;
+    const per = (progress / endTime) * 100;
+
+    if (per < percent) {
+      setPercent(per);
+      updatePercent(start);
     } else {
-      const progress = timestamp - start;
-      const per = (progress / endTime) * 100;
-
-      if (per < percent) {
-        setPercent(per);
-
-        if (progress < endTime) {
-          requestAnimationFrame((t) => updatePercent(t, start));
-        }
-      } else {
-        setEnd(true);
-      }
+      setEnd(true);
     }
-  };
+  });
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -71,11 +64,16 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
   return (
     <div className={styles.progress_bar}>
-      <h2 className={styles.title}>{isEnd ? option.title || '' : 'Checking now...😪'}</h2>
+      <h2 className={styles.title}>
+        {isEnd ? option.title || '' : 'Checking now...😪'}
+      </h2>
 
       <div className={styles.bar_container}>
         <div className={styles.bar} style={style} />
-        <div className={styles.bar_shadow} />
+        <div
+          className={styles.bar_shadow}
+          style={{ width: `${100 - state}%` }}
+        />
       </div>
 
       <p className={styles.label}>{option.label || ''}</p>

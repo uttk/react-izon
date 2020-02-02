@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as palette from 'google-palette';
 import { Dependencies } from '@react-izon/core';
 import { ChartOptions } from 'chart.js';
-import { AppContext, getUsedTimes } from '../util';
+import { AppContext } from '../util';
 
 interface DataSet {
   data: number[];
@@ -22,10 +22,8 @@ const createData = (dependencies: Dependencies): MyChartData => {
 
   Object.values(dependencies).forEach((dep) => {
     if (dep) {
-      const times = getUsedTimes(dep);
-
       data.labels.push(dep.name);
-      datasets.data.push(times + 1);
+      datasets.data.push(dep.used.length + 1);
     }
   });
 
@@ -61,9 +59,9 @@ const options: ChartOptions = {
 
       label: (i, d) => {
         const item = d.datasets[i.datasetIndex];
-        const times = item.data[i.index];
+        const times = item.data[i.index] as number;
 
-        return `${times} times`;
+        return `${times - 1} times`;
       },
     },
   },
