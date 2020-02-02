@@ -3,10 +3,10 @@ import styles from './Home.module.scss';
 
 export const Home: React.FC = () => (
   <div className={styles.home}>
-    <h1>
+    <h1 className={styles.title}>
       Welcome to React-izon
-      <span role="img" aria-labelledby="🎉">
-        🎉
+      <span role="img" aria-labelledby="😎">
+        😎
       </span>
     </h1>
   </div>

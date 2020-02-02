@@ -1,2 +1,11 @@
 
+.home {
+  width: calc(100vw - 250px);
+  display: flex;
+  justify-content: center;
+}
 
+.title {
+  font-size: 3em;
+  border-bottom: 2px solid rgb(50, 50, 50);
+}
