@@ -1,3 +1,6 @@
+import cli from "cli-ux";
+import * as colors from "colors";
+import { SingleBar } from "cli-progress";
 import { Command, flags } from "@oclif/command";
 import { DependencyChecker } from "@react-izon/core";
 import { startServer, ServerOptions } from "@react-izon/ui";
@@ -30,9 +33,55 @@ class ReactIzon extends Command {
     }
   ];
 
+  private totalTask: number = 1;
+  private progress: SingleBar = cli.progress({
+    format:
+      "Checking Progress |" +
+      colors.cyan("{bar}") +
+      "| {percentage}% || {value}/{total} || Speed: {speed}",
+    barCompleteChar: "\u2588",
+    barIncompleteChar: "\u2591",
+    hideCursor: true
+  });
+
   private check(path: string, options: ServerOptions) {
-    const checker = new DependencyChecker(path, depenencies => {
-      startServer(depenencies, options);
+    const checker = new DependencyChecker(path, event => {
+      switch (event.type) {
+        case "start":
+          this.progress.start(this.totalTask, 0, { speed: "N/A" });
+          break;
+
+        case "check-start":
+          this.totalTask += 1;
+          this.progress.setTotal(this.totalTask);
+          break;
+
+        case "check-end":
+          this.progress.increment();
+          break;
+
+        case "check-error":
+          this.progress.increment();
+          this.log(colors.red(event.error.message));
+          break;
+
+        case "done":
+          this.progress.update(this.totalTask);
+          this.progress.stop();
+          this.log(colors.green("Cheking Complete !"));
+
+          options.listenCallback = () => {
+            this.log(
+              `listen to ${colors.bold(`http://localhost:${options.port}`)}`
+            );
+          };
+
+          startServer(event.dependencies, options);
+          break;
+
+        case "error":
+          this.error(event.error);
+      }
     });
 
     checker.check();
@@ -43,11 +92,16 @@ class ReactIzon extends Command {
     const path: string = argv[0];
     const options: ServerOptions = {
       isOpen: flags.open,
-      port: parseInt(flags.port) || 9000,
-      listenCallback: () => {
-        this.log(`listen to http://localhost:${options.port}`);
-      }
+      port: parseInt(flags.port) || 9000
     };
+
+    this.totalTask = 1;
+
+    this.log(
+      colors.gray("Starting React Component Dependencies Checking").underline
+    );
+
+    await cli.wait(1000);
 
     try {
       this.check(path, options);

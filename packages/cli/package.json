@@ -13,12 +13,14 @@
     "@oclif/plugin-help": "^2",
     "@react-izon/core": "^0.0.0",
     "@react-izon/ui": "^0.0.0",
+    "colors": "^1.4.0",
     "tslib": "^1"
   },
   "devDependencies": {
     "@oclif/dev-cli": "^1",
     "@oclif/test": "^1",
     "@types/chai": "^4",
+    "@types/cli-progress": "^3.4.2",
     "@types/mocha": "^5",
     "@types/node": "^10",
     "chai": "^4",
