@@ -1,16 +1,21 @@
 import * as React from 'react';
 import styles from './ProgressBar.module.scss';
 
+interface TextOption {
+  label?: string;
+  title?: string;
+}
+
 interface ProgressBarProps {
   percent: number;
   delay?: number;
   stroke?: number;
   endTime?: number;
-  onText?: (percent: number) => string;
+  onText?: (percent: number, end: boolean) => TextOption;
 }
 
 const getColor = (percent: number): string => {
-  if (percent < 35) return 'green';
+  if (percent < 40) return 'green';
   if (percent < 70) return 'yellow';
 
   return 'red';
@@ -23,6 +28,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   percent,
   onText,
 }) => {
+  const [isEnd, setEnd] = React.useState(false);
   const [state, setPercent] = React.useState(0);
   const nowPercent = Math.min(percent, state);
 
@@ -45,6 +51,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         if (progress < endTime) {
           requestAnimationFrame((t) => updatePercent(t, start));
         }
+      } else {
+        setEnd(true);
       }
     }
   };
@@ -59,16 +67,18 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     }, delay);
   }, [percent, delay]);
 
+  const option = onText(state, isEnd);
+
   return (
     <div className={styles.progress_bar}>
+      <h2 className={styles.title}>{isEnd ? option.title || '' : 'Checking now...😪'}</h2>
+
       <div className={styles.bar_container}>
         <div className={styles.bar} style={style} />
         <div className={styles.bar_shadow} />
       </div>
 
-      <p>
-        {onText ? onText(Math.round(nowPercent)) : `${Math.round(nowPercent)}`}
-      </p>
+      <p className={styles.label}>{option.label || ''}</p>
     </div>
   );
 };
