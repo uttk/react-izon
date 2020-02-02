@@ -1,32 +1,42 @@
-react-izon
-==========
+# react-izon
 
-Dependency analysis tool of React Components
+A cli tool that analyzes the dependency of React Component
 
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/react-izon.svg)](https://npmjs.org/package/react-izon)
-[![Downloads/week](https://img.shields.io/npm/dw/react-izon.svg)](https://npmjs.org/package/react-izon)
-[![License](https://img.shields.io/npm/l/react-izon.svg)](https://github.com/uttk/react-izon/blob/master/package.json)
+## Install
 
-<!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
-<!-- tocstop -->
-# Usage
-<!-- usage -->
-```sh-session
-$ npm install -g react-izon
-$ react-izon COMMAND
-running command...
-$ react-izon (-v|--version|version)
-react-izon/0.0.0 win32-x64 node-v12.14.1
-$ react-izon --help [COMMAND]
-USAGE
-  $ react-izon COMMAND
-...
+Install with [npm](https://www.npmjs.com/)
+
+```bash
+$> npm install -g @react-izon/ui
 ```
-<!-- usagestop -->
-# Commands
-<!-- commands -->
 
-<!-- commandsstop -->
+Install with [yarn](https://classic.yarnpkg.com/)
+
+```bash
+$> yarn global add @react-izon/ui
+```
+
+# Usage
+
+```sh-session
+$> npm install -g react-izon
+$> react-izon analyze_file_path
+
+...
+
+listen to http://localhost:9000
+```
+
+Use with `npx`
+
+```sh-session
+$> npx react-izon analyze_file_path
+
+...
+
+listen to http://localhost:9000
+```
+
+# License
+
+[MIT](LICENSE "LICENSE")
