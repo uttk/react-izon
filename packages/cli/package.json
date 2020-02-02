@@ -20,7 +20,10 @@
   },
   "files": [
     "/bin",
-    "/lib"
+    "/lib",
+    "LICENSE",
+    "package.json",
+    "README.md"
   ],
   "scripts": {
     "build": "rimraf lib && tsc -b",
